@@ -1,7 +1,5 @@
-.git*
-test/
-test-browser/
-build/
+test
+.gitignore
 .travis.yml
-*.swp
 Makefile
+example.js
