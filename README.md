@@ -1,57 +1,124 @@
-<a href="http://promisesaplus.com/">
-    <img src="http://promisesaplus.com/assets/logo-small.png" alt="Promises/A+ logo"
-         title="Promises/A+ 1.1 compliant" align="right" />
-</a>
+# broadway [![Build Status](https://secure.travis-ci.org/flatiron/broadway.png)](http://travis-ci.org/flatiron/broadway)
 
+*Lightweight application extensibility and composition with a twist of feature
+reflection.*
 
-[![Build Status](https://travis-ci.org/petkaantonov/bluebird.svg?branch=master)](https://travis-ci.org/petkaantonov/bluebird)
-[![coverage-98%](https://img.shields.io/badge/coverage-98%25-brightgreen.svg?style=flat)](http://petkaantonov.github.io/bluebird/coverage/debug/index.html)
+## Example
 
-**Got a question?** Join us on [stackoverflow](http://stackoverflow.com/questions/tagged/bluebird), the [mailing list](https://groups.google.com/forum/#!forum/bluebird-js) or chat on [IRC](https://webchat.freenode.net/?channels=#promises)
+### app.js
+```js
+var broadway = require("broadway");
 
-# Introduction
+var app = new broadway.App();
 
-Bluebird is a fully featured promise library with focus on innovative features and performance
+// Passes the second argument to `helloworld.attach`.
+app.use(require("./plugins/helloworld"), { "delimiter": "!" } );
 
-See the [**bluebird website**](http://bluebirdjs.com/docs/getting-started.html) for further documentation, references and instructions. See the [**API reference**](http://bluebirdjs.com/docs/api-reference.html) here.
+app.init(function (err) {
+  if (err) {
+    console.log(err);
+  }
+});
 
-For bluebird 2.x documentation and files, see the [2.x tree](https://github.com/petkaantonov/bluebird/tree/2.x).
+app.hello("world");
+```
 
-### Note 
+### plugins/helloworld.js
 
-Promises in Node.js 10 are significantly faster than before. Bluebird still includes a lot of features like cancellation, iteration methods and warnings that native promises don't. If you are using Bluebird for performance rather than for those - please consider giving native promises a shot and running the benchmarks yourself.
+```js
+// `exports.attach` gets called by broadway on `app.use`
+exports.attach = function (options) {
 
-# Questions and issues
+  this.hello = function (world) {
+    console.log("Hello "+ world + options.delimiter || ".");
+  };
 
-The [github issue tracker](https://github.com/petkaantonov/bluebird/issues) is **_only_** for bug reports and feature requests. Anything else, such as questions for help in using the library, should be posted in [StackOverflow](http://stackoverflow.com/questions/tagged/bluebird) under tags `promise` and `bluebird`.
+};
 
+// `exports.init` gets called by broadway on `app.init`.
+exports.init = function (done) {
 
+  // This plugin doesn't require any initialization step.
+  return done();
 
-## Thanks
+};
+```
 
-Thanks to BrowserStack for providing us with a free account which lets us support old browsers like IE8. 
+### run it!
 
-# License
+```bash
+josh@onix:~/dev/broadway/examples$ node simple/app.js 
+Hello world!
+josh@onix:~/dev/broadway/examples$ 
+```
 
-The MIT License (MIT)
+## Installation
 
-Copyright (c) 2013-2019 Petka Antonov
+### Installing npm (node package manager)
+``` bash
+  $ curl http://npmjs.org/install.sh | sh
+```
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+### Installing broadway
+``` bash 
+  $ [sudo] npm install broadway
+```
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+## API
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+### App#init(callback)
 
+Initialize application and it's plugins, `callback` will be called with null or
+initialization error as first argument.
+
+### App#use(plugin, options)
+
+Attach plugin to application. `plugin` should conform to following interface:
+
+```javascript
+var plugin = {
+  "name": "example-plugin", // Plugin's name
+
+  "attach": function attach(options) {
+    // Called with plugin options once plugin attached to application
+    // `this` - is a reference to application
+  },
+
+  "detach": function detach() {
+    // Called when plugin detached from application
+    // (Only if plugin with same name was attached)
+    // `this` - is a reference to application
+  },
+
+  "init": function init(callback) {
+    // Called on application initialization
+    // App#init(callback) will be called once every plugin will call `callback`
+    // `this` - is a reference to application
+  }
+};
+```
+
+### App#on(event, callback) and App#emit(event, data)
+
+App inherits from [EventEmitter2][2], and many plugins build on this
+functionality.
+
+#### Built-In Events:
+
+* `error:init`: Broadway emits this event when it throws an error while attempting to initialize.
+
+Read the [EventEmitter2][2] documentation for more information.
+
+## Tests
+All tests are written with [vows][0] and should be run with [npm][1]:
+
+``` bash
+  $ npm test
+```
+
+#### [Charlie Robbins](http://nodejitsu.com)
+#### License: MIT
+
+[0]: http://vowsjs.org
+[1]: http://npmjs.org
+[2]: https://github.com/hij1nx/EventEmitter2
