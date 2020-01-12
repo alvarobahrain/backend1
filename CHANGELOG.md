@@ -1,157 +1,222 @@
-# Release history
+#### 7.2.1
+* 24/05/2018
+* Add `browser` field to *package.json*.
 
-All notable changes to this project will be documented in this file.
+#### 7.2.0
+* 22/05/2018
+* #166 Correct *.mjs* file. Remove extension from `main` field in *package.json*.
 
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
+#### 7.1.0
+* 18/05/2018
+* Add `module` field to *package.json* for *bignumber.mjs*.
 
-<details>
-  <summary><strong>Guiding Principles</strong></summary>
+#### 7.0.2
+* 17/05/2018
+* #165 Bugfix: upper-case letters for bases 11-36 in a custom alphabet.
+* Add note to *README* regarding creating BigNumbers from Number values.
 
-- Changelogs are for humans, not machines.
-- There should be an entry for every single version.
-- The same types of changes should be grouped.
-- Versions and sections should be linkable.
-- The latest version comes first.
-- The release date of each versions is displayed.
-- Mention whether you follow Semantic Versioning.
+#### 7.0.1
+* 26/04/2018
+* #158 Fix global object variable name typo.
 
-</details>
+#### 7.0.0
+* 26/04/2018
+* #143 Remove global BigNumber from typings.
+* #144 Enable compatibility with `Object.freeze(Object.prototype)`.
+* #148 #123 #11 Only throw on a number primitive with more than 15 significant digits if `BigNumber.DEBUG` is `true`.
+* Only throw on an invalid BigNumber value if `BigNumber.DEBUG` is `true`. Return BigNumber `NaN` instead.
+* #154 `exponentiatedBy`: allow BigNumber exponent.
+* #156 Prevent Content Security Policy *unsafe-eval* issue.
+* `toFraction`: allow `Infinity` maximum denominator.
+* Comment-out some excess tests to reduce test time.
+* Amend indentation and other spacing.
 
-<details>
-  <summary><strong>Types of changes</strong></summary>
+#### 6.0.0
+* 26/01/2018
+* #137 Implement `APLHABET` configuration option.
+* Remove `ERRORS` configuration option.
+* Remove `toDigits` method; extend `precision` method accordingly.
+* Remove s`round` method; extend `decimalPlaces` method accordingly.
+* Remove methods: `ceil`, `floor`, and `truncated`.
+* Remove method aliases: `add`, `cmp`, `isInt`, `isNeg`, `trunc`, `mul`, `neg` and `sub`.
+* Rename methods: `shift` to `shiftedBy`, `another` to `clone`, `toPower` to `exponentiatedBy`, and `equals` to `isEqualTo`.
+* Rename methods: add `is` prefix to `greaterThan`, `greaterThanOrEqualTo`, `lessThan` and `lessThanOrEqualTo`.
+* Add methods: `multipliedBy`, `isBigNumber`, `isPositive`, `integerValue`, `maximum` and `minimum`.
+* Refactor test suite.
+* Add *CHANGELOG.md*.
+* Rewrite *bignumber.d.ts*.
+* Redo API image.
 
-Changelog entries are classified using the following labels _(from [keep-a-changelog](http://keepachangelog.com/)_):
+#### 5.0.0
+* 27/11/2017
+* #81 Don't throw on constructor call without `new`.
 
-- `Added` for new features.
-- `Changed` for changes in existing functionality.
-- `Deprecated` for soon-to-be removed features.
-- `Removed` for now removed features.
-- `Fixed` for any bug fixes.
-- `Security` in case of vulnerabilities.
+#### 4.1.0
+* 26/09/2017
+* Remove node 0.6 from *.travis.yml*.
+* Add *bignumber.mjs*.
 
-</details>
+#### 4.0.4
+* 03/09/2017
+* Add missing aliases to *bignumber.d.ts*.
 
-## [6.0.0] - 2017-10-13
+#### 4.0.3
+* 30/08/2017
+* Add types: *bignumber.d.ts*.
 
-- refactor code to be more performant
-- refactor benchmarks
+#### 4.0.2
+* 03/05/2017
+* #120 Workaround Safari/Webkit bug.
 
-## [5.1.0] - 2017-10-13
+#### 4.0.1
+* 05/04/2017
+* #121 BigNumber.default to BigNumber['default'].
 
-**Added**
+#### 4.0.0
+* 09/01/2017
+* Replace BigNumber.isBigNumber method with isBigNumber prototype property.
 
-- Merge pull request #15 from aretecode/patch-1
-- adds support and tests for string & array iterators
+#### 3.1.2
+* 08/01/2017
+* Minor documentation edit.
 
-**Changed**
+#### 3.1.1
+* 08/01/2017
+* Uncomment `isBigNumber` tests.
+* Ignore dot files.
 
-- updates benchmarks
+#### 3.1.0
+* 08/01/2017
+* Add `isBigNumber` method.
 
-## [5.0.2] - 2017-08-02
+#### 3.0.2
+* 08/01/2017
+* Bugfix: Possible incorrect value of `ERRORS` after a `BigNumber.another` call (due to `parseNumeric` declaration in outer scope).
 
-- Merge pull request #14 from struct78/master
-- Added `undefined` check
+#### 3.0.1
+* 23/11/2016
+* Apply fix for old ipads with `%` issue, see #57 and #102.
+* Correct error message.
 
-## [5.0.0] - 2017-06-21
+#### 3.0.0
+* 09/11/2016
+* Remove `require('crypto')` - leave it to the user.
+* Add `BigNumber.set` as `BigNumber.config` alias.
+* Default `POW_PRECISION` to `0`.
 
-- Merge pull request #12 from aretecode/iterator
-- Set Iterator + Map Iterator
-- streamline `isbuffer`, minor edits
+#### 2.4.0
+* 14/07/2016
+* #97 Add exports to support ES6 imports.
 
-## [4.0.0] - 2017-05-19
+#### 2.3.0
+* 07/03/2016
+* #86 Add modulus parameter to `toPower`.
 
-- Merge pull request #8 from tunnckoCore/master
-- update deps
+#### 2.2.0
+* 03/03/2016
+* #91 Permit larger JS integers.
 
-## [3.2.2] - 2017-05-16
+#### 2.1.4
+* 15/12/2015
+* Correct UMD.
 
-- fix version
+#### 2.1.3
+* 13/12/2015
+* Refactor re global object and crypto availability when bundling.
 
-## [3.2.1] - 2017-05-16
+#### 2.1.2
+* 10/12/2015
+* Bugfix: `window.crypto` not assigned to `crypto`.
 
-- add browserify
+#### 2.1.1
+* 09/12/2015
+* Prevent code bundler from adding `crypto` shim.
 
-## [3.2.0] - 2017-04-25
+#### 2.1.0
+* 26/10/2015
+* For `valueOf` and `toJSON`, include the minus sign with negative zero.
 
-- Merge pull request #10 from ksheedlo/unrequire-buffer
-- add `promise` support and tests
-- Remove unnecessary `Buffer` check
+#### 2.0.8
+* 2/10/2015
+* Internal round function bugfix.
 
-## [3.1.0] - 2016-12-07
+#### 2.0.6
+* 31/03/2015
+* Add bower.json. Tweak division after in-depth review.
 
-- Merge pull request #7 from laggingreflex/err
-- add support for `error` and tests
-- run update
+#### 2.0.5
+* 25/03/2015
+* Amend README. Remove bitcoin address.
 
-## [3.0.4] - 2016-07-29
+#### 2.0.4
+* 25/03/2015
+* Critical bugfix #58: division.
 
-- move tests
-- run update
+#### 2.0.3
+* 18/02/2015
+* Amend README. Add source map.
 
-## [3.0.3] - 2016-05-03
+#### 2.0.2
+* 18/02/2015
+* Correct links.
 
-- fix prepublish script
-- remove unused dep
+#### 2.0.1
+* 18/02/2015
+* Add `max`, `min`, `precision`, `random`, `shiftedBy`, `toDigits` and `truncated` methods.
+* Add the short-forms: `add`, `mul`, `sd`, `sub` and `trunc`.
+* Add an `another` method to enable multiple independent constructors to be created.
+* Add support for the base 2, 8 and 16 prefixes `0b`, `0o` and `0x`.
+* Enable a rounding mode to be specified as a second parameter to `toExponential`, `toFixed`, `toFormat` and `toPrecision`.
+* Add a `CRYPTO` configuration property so cryptographically-secure pseudo-random number generation can be specified.
+* Add a `MODULO_MODE` configuration property to enable the rounding mode used by the `modulo` operation to be specified.
+* Add a `POW_PRECISION` configuration property to enable the number of significant digits calculated by the power operation to be limited.
+* Improve code quality.
+* Improve documentation.
 
-## [3.0.0] - 2015-11-17
+#### 2.0.0
+* 29/12/2014
+* Add `dividedToIntegerBy`, `isInteger` and `toFormat` methods.
+* Remove the following short-forms: `isF`, `isZ`, `toE`, `toF`, `toFr`, `toN`, `toP`, `toS`.
+* Store a BigNumber's coefficient in base 1e14, rather than base 10.
+* Add fast path for integers to BigNumber constructor.
+* Incorporate the library into the online documentation.
 
-- add typed array support
-- Merge pull request #5 from miguelmota/typed-arrays
-- adds new tests
+#### 1.5.0
+* 13/11/2014
+* Add `toJSON` and `decimalPlaces` methods.
 
-## [2.0.1] - 2015-08-21
+#### 1.4.1
+* 08/06/2014
+* Amend README.
 
-- use `is-buffer` module
+#### 1.4.0
+* 08/05/2014
+* Add `toNumber`.
 
-## [2.0.0] - 2015-05-31
+#### 1.3.0
+* 08/11/2013
+* Ensure correct rounding of `sqrt` in all, rather than almost all, cases.
+* Maximum radix to 64.
 
-- Create fallback for `Array.isArray` if used as a browser package
-- Merge pull request #2 from dtothefp/patch-1
-- Merge pull request #3 from pdehaan/patch-1
-- Merge branch 'master' of https://github.com/chorks/kind-of into chorks-master
-- optimizations, mostly date and regex
+#### 1.2.1
+* 17/10/2013
+* Sign of zero when x < 0 and x + (-x) = 0.
 
-## [1.1.0] - 2015-02-09
+#### 1.2.0
+* 19/9/2013
+* Throw Error objects for stack.
 
-- adds `buffer` support
-- adds tests for `buffer`
+#### 1.1.1
+* 22/8/2013
+* Show original value in constructor error message.
 
-## [1.0.0] - 2015-01-19
+#### 1.1.0
+* 1/8/2013
+* Allow numbers with trailing radix point.
 
-- update benchmarks
-- optimizations based on benchmarks
+#### 1.0.1
+* Bugfix: error messages with incorrect method name
 
-## [0.1.2] - 2014-10-26
-
-- return `typeof` value if it's not an object. very slight speed improvement
-- use `.slice`
-- adds benchmarks
-
-## [0.1.0] - 2014-9-26
-
-- first commit
-
-[6.0.0]: https://github.com/jonschlinkert/kind-of/compare/5.1.0...6.0.0
-[5.1.0]: https://github.com/jonschlinkert/kind-of/compare/5.0.2...5.1.0
-[5.0.2]: https://github.com/jonschlinkert/kind-of/compare/5.0.1...5.0.2
-[5.0.1]: https://github.com/jonschlinkert/kind-of/compare/5.0.0...5.0.1
-[5.0.0]: https://github.com/jonschlinkert/kind-of/compare/4.0.0...5.0.0
-[4.0.0]: https://github.com/jonschlinkert/kind-of/compare/3.2.2...4.0.0
-[3.2.2]: https://github.com/jonschlinkert/kind-of/compare/3.2.1...3.2.2
-[3.2.1]: https://github.com/jonschlinkert/kind-of/compare/3.2.0...3.2.1
-[3.2.0]: https://github.com/jonschlinkert/kind-of/compare/3.1.0...3.2.0
-[3.1.0]: https://github.com/jonschlinkert/kind-of/compare/3.0.4...3.1.0
-[3.0.4]: https://github.com/jonschlinkert/kind-of/compare/3.0.3...3.0.4
-[3.0.3]: https://github.com/jonschlinkert/kind-of/compare/3.0.0...3.0.3
-[3.0.0]: https://github.com/jonschlinkert/kind-of/compare/2.0.1...3.0.0
-[2.0.1]: https://github.com/jonschlinkert/kind-of/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/jonschlinkert/kind-of/compare/1.1.0...2.0.0
-[1.1.0]: https://github.com/jonschlinkert/kind-of/compare/1.0.0...1.1.0
-[1.0.0]: https://github.com/jonschlinkert/kind-of/compare/0.1.2...1.0.0
-[0.1.2]: https://github.com/jonschlinkert/kind-of/compare/0.1.0...0.1.2
-[0.1.0]: https://github.com/jonschlinkert/kind-of/commit/2fae09b0b19b1aadb558e9be39f0c3ef6034eb87
-
-[Unreleased]: https://github.com/jonschlinkert/kind-of/compare/0.1.2...HEAD
-[keep-a-changelog]: https://github.com/olivierlacan/keep-a-changelog
-
+#### 1.0.0
+* 8/11/2012
+* Initial release

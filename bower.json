@@ -1,24 +1,36 @@
 {
-  "name": "atob",
-  "description": "atob for isomorphic environments",
-  "main": "browser-atob.js",
+  "name": "bignumber.js",
+  "main": "bignumber.js",
+  "version": "7.2.1",
+  "homepage": "https://github.com/MikeMcl/bignumber.js",
   "authors": [
-    "AJ ONeal <coolaj86@gmail.com> (https://coolaj86.com)"
+    "Michael Mclaughlin <M8ch88l@gmail.com>"
   ],
-  "license": "(MIT OR Apache-2.0)",
-  "keywords": [
-    "atob",
-    "browser"
-  ],
-  "homepage": "https://github.com/node-browser-compat/atob",
+  "description": "A library for arbitrary-precision decimal and non-decimal arithmetic",
   "moduleType": [
-    "globals"
+    "amd",
+    "globals",
+    "node"
   ],
+   "keywords": [
+    "arbitrary",
+    "precision",
+    "arithmetic",
+    "big",
+    "number",
+    "decimal",
+    "float",
+    "biginteger",
+    "bigdecimal",
+    "bignumber",
+    "bigint",
+    "bignum"
+  ],
+  "license": "MIT",
   "ignore": [
-    "**/.*",
-    "node_modules",
-    "bower_components",
-    "test",
-    "tests"
+    ".*",
+    "*.json",
+    "test"
   ]
 }
+
