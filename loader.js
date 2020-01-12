@@ -1,63 +1,78 @@
-const app = require('./server');
-const router = require('./routes/main.route');
-const routerAuth = require('./routes/auth.route');
-const cookieParser = require('cookie-parser');
-const passport = require('passport');
-const session = require('express-session');
-const expressSanitizer = require('express-sanitizer');
-const bodyParser = require('body-parser');
-const models = require('./models');
-const expressValidator = require('express-validator');
-const nodemon = require('nodemon');
+"use strict"
+    // global key for user preferred registration
+var REGISTRATION_KEY = '@@any-promise/REGISTRATION',
+    // Prior registration (preferred or detected)
+    registered = null
 
-//para garantir que os modulos serão utilizados
+/**
+ * Registers the given implementation.  An implementation must
+ * be registered prior to any call to `require("any-promise")`,
+ * typically on application load.
+ *
+ * If called with no arguments, will return registration in
+ * following priority:
+ *
+ * For Node.js:
+ *
+ * 1. Previous registration
+ * 2. global.Promise if node.js version >= 0.12
+ * 3. Auto detected promise based on first sucessful require of
+ *    known promise libraries. Note this is a last resort, as the
+ *    loaded library is non-deterministic. node.js >= 0.12 will
+ *    always use global.Promise over this priority list.
+ * 4. Throws error.
+ *
+ * For Browser:
+ *
+ * 1. Previous registration
+ * 2. window.Promise
+ * 3. Throws error.
+ *
+ * Options:
+ *
+ * Promise: Desired Promise constructor
+ * global: Boolean - Should the registration be cached in a global variable to
+ * allow cross dependency/bundle registration?  (default true)
+ */
+module.exports = function(root, loadImplementation){
+  return function register(implementation, opts){
+    implementation = implementation || null
+    opts = opts || {}
+    // global registration unless explicitly  {global: false} in options (default true)
+    var registerGlobal = opts.global !== false;
 
-app.use(bodyParser.json(), bodyParser.urlencoded({ extended: true}));
-app.use(expressSanitizer());
-app.use(cookieParser());
-app.set('trust proxy', 1);
-app.use(session({
-    secret: "projetoPw",
-    resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: true,
-        maxAge: 600000000,
-        httpOnly: true,
+    // load any previous global registration
+    if(registered === null && registerGlobal){
+      registered = root[REGISTRATION_KEY] || null
     }
 
-}));
-
-app.use(expressValidator());
-app.use(function(req, res, next) {
-    // check if session exists
-    if (global.sessData === undefined) {
-      global.sessData = req.session;                        
-      global.sessData.ID = req.sessionID;
-      console.log('Sessão associada à variavel');
+    if(registered !== null
+        && implementation !== null
+        && registered.implementation !== implementation){
+      // Throw error if attempting to redefine implementation
+      throw new Error('any-promise already defined as "'+registered.implementation+
+        '".  You can only register an implementation before the first '+
+        ' call to require("any-promise") and an implementation cannot be changed')
     }
-    else { // yes, cookie was already present
-      console.log('A sessão existe!', global.sessData.ID);
+
+    if(registered === null){
+      // use provided implementation
+      if(implementation !== null && typeof opts.Promise !== 'undefined'){
+        registered = {
+          Promise: opts.Promise,
+          implementation: implementation
+        }
+      } else {
+        // require implementation if implementation is specified but not provided
+        registered = loadImplementation(implementation)
+      }
+
+      if(registerGlobal){
+        // register preference globally in case multiple installations
+        root[REGISTRATION_KEY] = registered
+      }
     }
-    next();
-});
 
-//fazer depois de ter o passport
-
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
-require('./routes/auth.route.js')(app, passport);
-require('./config/passport/passport.js')(passport, models.user);
-//Sync Database
-
-models.sequelize.sync().then(function() {
-  console.log('Nice! Database looks fine');
-
-}).catch(function(err) {
-  console.log(err, "Something went wrong with the Database Update!");
-});
-app.use('/', router);
-
-
-
-module.exports = app; 
+    return registered
+  }
+}

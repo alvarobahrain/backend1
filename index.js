@@ -1,25 +1,28 @@
-"use strict";
-let fs        = require("fs");
-let path      = require("path");
-let Sequelize = require("sequelize");
-let env       = "MySQL";
-let config    = require(path.join(__dirname, '../', 'config', 'config.json'))[env];
-let sequelize = new Sequelize(config.database, config.username, config.password, config);
-let db        = {};
-fs
-  .readdirSync(__dirname)
-  .filter(function(file) {
-    return (file.indexOf(".") !== 0) && (file !== "index.js");
-  })
-  .forEach(function(file) {
-    let model = sequelize.import(path.join(__dirname, file));
-    db[model.name] = model;
-  });
+/*!
+ * array-unique <https://github.com/jonschlinkert/array-unique>
+ *
+ * Copyright (c) 2014-2015, Jon Schlinkert.
+ * Licensed under the MIT License.
+ */
 
-Object.keys(db).forEach(function(modelName) {
-  if ("associate" in db[modelName]) {
-    db[modelName].associate(db);
+'use strict';
+
+module.exports = function unique(arr) {
+  if (!Array.isArray(arr)) {
+    throw new TypeError('array-unique expects an array.');
   }
-});
-db.sequelize = sequelize;
-module.exports = db;
+
+  var len = arr.length;
+  var i = -1;
+
+  while (i++ < len) {
+    var j = i + 1;
+
+    for (; j < arr.length; ++j) {
+      if (arr[i] === arr[j]) {
+        arr.splice(j--, 1);
+      }
+    }
+  }
+  return arr;
+};
